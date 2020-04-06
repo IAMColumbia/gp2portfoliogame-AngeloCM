@@ -12,7 +12,7 @@ Genre: Top-down shooting Game
 Platform: Computer
 
 Images:
-![Unknown Spirit Example](imageSamples/battlerite.png)
+![Unknown Spirit Example](imageSamples/battlerite.jpg)
 
 Folder Sturcture
 
