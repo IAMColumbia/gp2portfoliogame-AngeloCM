@@ -23,6 +23,7 @@ public class PlayerController : MonoBehaviour
     Camera mainCamera;
 
     public GunController _gunController;
+    protected GunSpawner _gunSpawner;
 
     [SerializeField]
     public float speed = 6.0f;
@@ -34,16 +35,20 @@ public class PlayerController : MonoBehaviour
     {
         state = PlayerState.IDLE;
         myRigibody = GetComponent<Rigidbody>();
-        mainCamera = FindObjectOfType<Camera>();  
+        mainCamera = FindObjectOfType<Camera>();
+        _gunSpawner = GameObject.FindGameObjectWithTag("Spawn").GetComponent<GunSpawner>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        shotTimer += Time.deltaTime;
+
+        if (Input.GetMouseButtonDown(0) && shotTimer > _gunController._currentGun.timeBetweenShots)
         {
             _gunController.isFiring = true;
             state = PlayerState.SHOOT;
+            shotTimer = 0;
         }
         if (Input.GetMouseButtonUp(0))
         {
@@ -88,18 +93,21 @@ public class PlayerController : MonoBehaviour
             Debug.Log("MACHINE GUN");
             _gunController.setMachineGun();
             Destroy(other.gameObject);
+            _gunSpawner.deletePowerUp(other.gameObject);
         }
         else if (other.gameObject.CompareTag("ShotGun"))
         {
             Debug.Log("SHOTGUN");
             _gunController.setShotGun();
             Destroy(other.gameObject);
+            _gunSpawner.deletePowerUp(other.gameObject);
         }
         else if (other.gameObject.CompareTag("Pistol"))
         {
             Debug.Log("PISTOL");
             _gunController.setPistol();
             Destroy(other.gameObject);
+            _gunSpawner.deletePowerUp(other.gameObject);
         }
     }
 }
